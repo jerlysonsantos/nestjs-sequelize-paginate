@@ -53,15 +53,19 @@ export class PaginateService {
     let payload: { [key: string]: any } = {}
     let items: any[] = []
 
-    const data = await this.sequelize.models[modelName].findAndCountAll({
+    const data = await this.sequelize.models[modelName].findAll({
       ...optionsSequelize,
       limit: offset,
       offset: start,
     })
 
-    totalItems = data.count
+    const count = await this.sequelize.models[modelName].count({
+      where: optionsSequelize.where,
+    })
+
+    totalItems = count
     totalPages = Math.ceil(totalItems / offset)
-    items = data.rows
+    items = data
 
     aux = page + 1
     nextPage = aux <= totalPages ? aux : null
