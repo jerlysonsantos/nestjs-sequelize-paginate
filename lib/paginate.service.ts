@@ -47,7 +47,7 @@ export class PaginateService {
     let lastUrl = null
 
     // Aux
-    let aux: any
+    let aux: number
 
     // Data variables
     let payload: { [key: string]: any } = {}
