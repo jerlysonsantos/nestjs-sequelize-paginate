@@ -1,7 +1,8 @@
 {
   "name": "@senaiplay/nestjs-sequelize-paginate",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "🏳‍🌈 Pagination helper method for Sequelize models.",
+  "main": "dist/index.js",
   "directories": {
     "lib": "lib"
   },
