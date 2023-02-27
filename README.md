@@ -28,7 +28,7 @@ You simply need to install the package !
 
 ```ts
 // We install with npm, but you could use the package manager you prefer !
-npm install -save nestjs-sequelize-paginate
+npm install -save @senaiplay/nestjs-sequelize-paginate
 ```
 
 ## ▶️ Getting started
