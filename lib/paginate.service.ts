@@ -59,18 +59,17 @@ export class PaginateService {
       offset: start,
     })
 
-    const rowCountTable: any[] = await this.sequelize.query(`
-      WITH RowCountTable AS
-      (
-         SELECT ROW_NUMBER() OVER ( ORDER BY created_at DESC ) AS 'rowNumber' FROM ${modelName} WHERE deleted_at IS NULL
-      )
-      SELECT rowNumber
-      FROM RowCountTable
-      ORDER BY rowNumber DESC
-      LIMIT 1
-   `)
+    const rowCountTable: any = await this.sequelize.models[modelName].findAll({
+      attributes: [[Sequelize.literal(`ROW_NUMBER() OVER ( ORDER BY created_at DESC )`), 'rowNumber']],
+      where: {
+        ...optionsSequelize.where,
+      },
+      order: [[Sequelize.literal('rowNumber'), 'DESC']],
+      raw: true,
+      limit: 1,
+    })
 
-    const count = rowCountTable[0][0].rowNumber
+    const count = rowCountTable[0].rowNumber
 
     totalItems = count
     totalPages = Math.ceil(totalItems / offset)
