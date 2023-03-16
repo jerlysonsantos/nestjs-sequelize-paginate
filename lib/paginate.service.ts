@@ -53,27 +53,16 @@ export class PaginateService {
     let payload: { [key: string]: any } = {}
     let items: any[] = []
 
-    const data = await this.sequelize.models[modelName].findAll({
+    const data = await this.sequelize.models[modelName].findAndCountAll({
       ...optionsSequelize,
       limit: offset,
       offset: start,
+      distinct: true,
     })
 
-    const rowCountTable: any = await this.sequelize.models[modelName].findAll({
-      attributes: [[Sequelize.literal(`ROW_NUMBER() OVER ( ORDER BY created_at DESC )`), 'rowNumber']],
-      where: {
-        ...optionsSequelize.where,
-      },
-      order: [[Sequelize.literal('rowNumber'), 'DESC']],
-      raw: true,
-      limit: 1,
-    })
-
-    const count = rowCountTable[0].rowNumber
-
-    totalItems = count
+    totalItems = data.count
     totalPages = Math.ceil(totalItems / offset)
-    items = data
+    items = data.rows
 
     aux = page + 1
     nextPage = aux <= totalPages ? aux : null
